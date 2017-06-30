@@ -80,9 +80,9 @@ class AchievementsStorage implements AchievementsStorageInterface
     {
         return $criterias->keyBy('id')->map(function (AchievementCriteriaModel $criteria) {
             return new AchievementCriteriaProgress(
-                $criteria->pivot->value,
+                intval($criteria->pivot->value),
                 false,
-                $criteria->pivot->completed
+                intval($criteria->pivot->completed) === 1
             );
         });
     }

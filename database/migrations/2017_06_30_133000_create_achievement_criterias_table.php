@@ -19,7 +19,7 @@ class CreateAchievementCriteriasTable extends Migration
             $table->string('type')->index();
             $table->string('name')->nullable();
             $table->unsignedInteger('max_value')->index();
-            $table->json('requirements')->nullable();
+            $table->text('requirements')->nullable();
             $table->timestamps();
         });
     }
