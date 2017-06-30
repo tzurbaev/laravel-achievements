@@ -44,11 +44,11 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-version]: https://poser.pugx.org/tzurbaev/laravel-achievements/version?format=flat
 [ico-license]: https://poser.pugx.org/tzurbaev/laravel-achievements/license?format=flat
 [ico-travis]: https://api.travis-ci.org/tzurbaev/laravel-achievements.svg?branch=master
-[ico-styleci]: https://styleci.io/repos/XXX/shield?branch=master&style=flat
+[ico-styleci]: https://styleci.io/repos/95869727/shield?branch=master&style=flat
 [ico-scrutinizer]: https://scrutinizer-ci.com/g/tzurbaev/laravel-achievements/badges/quality-score.png?b=master
 
 [link-packagist]: https://packagist.org/packages/tzurbaev/laravel-achievements
 [link-travis]: https://travis-ci.org/tzurbaev/laravel-achievements
-[link-styleci]: https://styleci.io/repos/XXX
+[link-styleci]: https://styleci.io/repos/95869727
 [link-scrutinizer]: https://scrutinizer-ci.com/g/tzurbaev/laravel-achievements/
 [link-author]: https://github.com/tzurbaev

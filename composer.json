@@ -1,0 +1,36 @@
+{
+    "name": "tzurbaev/laravel-achievements",
+    "description": "Achievements System for Laravel framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "tzurbaev",
+            "email": "zurbaev@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "illuminate/support": "5.4.*",
+        "tzurbaev/achievements": "^0.9.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.1",
+        "mockery/mockery": "^0.9.9",
+        "orchestra/testbench": "~3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laravel\\Achievements\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Laravel\\Achievements\\Tests\\": "tests/"
+        },
+        "files": [
+            "database/seeds/AchievementsSeeder.php"
+        ]
+    },
+    "minimum-stability": "stable"
+}
