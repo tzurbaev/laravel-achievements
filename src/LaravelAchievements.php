@@ -54,7 +54,7 @@ class LaravelAchievements
     public function registerCriterias(array $criterias)
     {
         foreach ($criterias as $criteria) {
-            if (is_string($criteria)) {
+            if (!is_string($criteria)) {
                 continue;
             }
 
