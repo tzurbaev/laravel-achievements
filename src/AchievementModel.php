@@ -45,4 +45,15 @@ class AchievementModel extends Model
     {
         return $this->hasMany(AchievementCriteriaModel::class, 'achievement_id');
     }
+
+    /**
+     * Determines if achievement was completed.
+     * This works only in user-related achievements lists.
+     *
+     * @return bool
+     */
+    public function completed(): bool
+    {
+        return $this->relationLoaded('pivot') && !is_null($this->pivot->completed_at);
+    }
 }

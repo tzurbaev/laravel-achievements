@@ -1530,16 +1530,16 @@
         },
         {
             "name": "tzurbaev/achievements",
-            "version": "0.9.1",
+            "version": "0.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tzurbaev/achievements.git",
-                "reference": "806972b7567781a45cd883a9c6384d8fb342de4b"
+                "reference": "6fb0e0229129b62000696a0eee261b1fc24af4f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tzurbaev/achievements/zipball/806972b7567781a45cd883a9c6384d8fb342de4b",
-                "reference": "806972b7567781a45cd883a9c6384d8fb342de4b",
+                "url": "https://api.github.com/repos/tzurbaev/achievements/zipball/6fb0e0229129b62000696a0eee261b1fc24af4f6",
+                "reference": "6fb0e0229129b62000696a0eee261b1fc24af4f6",
                 "shasum": ""
             },
             "require": {
@@ -1566,7 +1566,7 @@
                 }
             ],
             "description": "Achievements System",
-            "time": "2017-06-30T08:39:46+00:00"
+            "time": "2017-07-01T18:14:54+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

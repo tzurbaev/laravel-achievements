@@ -125,7 +125,7 @@ class AchievementsStorageTest extends TestCase
         $this->assertSame(0, count($this->user->achievementCriterias));
 
         $result = $this->storage->setCriteriaProgressUpdated(
-            $this->user, $criteria, $achievement, new AchievementCriteriaProgress(6, true, false)
+            $this->user, $criteria, $achievement, new AchievementCriteriaProgress(6, true, false, ['hello' => 'world'])
         );
 
         $this->assertTrue($result);
@@ -136,6 +136,7 @@ class AchievementsStorageTest extends TestCase
         $this->assertInstanceOf(AchievementCriteriaModel::class, $userCriteria);
         $this->assertSame($criteria->id(), $userCriteria->id);
         $this->assertSame(6, intval($userCriteria->pivot->value));
+        $this->assertSame(['hello' => 'world'], json_decode($userCriteria->pivot->progress_data, true));
 
         Event::assertDispatched(CriteriaUpdated::class);
     }

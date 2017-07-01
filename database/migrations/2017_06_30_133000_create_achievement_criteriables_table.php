@@ -20,6 +20,7 @@ class CreateAchievementCriteriablesTable extends Migration
             $table->unsignedInteger('achievement_criteria_model_id')->index();
             $table->unsignedInteger('value')->index();
             $table->tinyInteger('completed')->default(0)->index();
+            $table->text('progress_data')->nullable();
             $table->timestamp('updated_at');
         });
     }

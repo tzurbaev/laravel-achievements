@@ -82,7 +82,8 @@ class AchievementsStorage implements AchievementsStorageInterface
             return new AchievementCriteriaProgress(
                 intval($criteria->pivot->value),
                 false,
-                intval($criteria->pivot->completed) === 1
+                intval($criteria->pivot->completed) === 1,
+                is_string($criteria->pivot->progress_data) ? json_decode($criteria->pivot->progress_data, true) : []
             );
         });
     }
@@ -111,6 +112,7 @@ class AchievementsStorage implements AchievementsStorageInterface
                 'value' => $progress->value,
                 'changed' => false,
                 'completed' => $progress->completed,
+                'data' => $progress->data,
             ];
         }
 
@@ -289,6 +291,7 @@ class AchievementsStorage implements AchievementsStorageInterface
             $criteria->id() => [
                 'value' => $progress->value,
                 'completed' => $progress->completed,
+                'progress_data' => json_encode($progress->data),
             ],
         ]);
 

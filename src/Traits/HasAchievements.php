@@ -42,6 +42,6 @@ trait HasAchievements
     public function achievementCriterias()
     {
         return $this->morphToMany(AchievementCriteriaModel::class, 'achievement_criteriable')
-            ->withPivot(['value', 'completed', 'updated_at']);
+            ->withPivot(['value', 'completed', 'progress_data', 'updated_at']);
     }
 }
