@@ -41,9 +41,9 @@ class LaravelAchievements
      *
      * @return int
      */
-    public function criteriaUpdated($owner, string $type, $data = null)
+    public function updateCriterias($owner, string $type, $data = null)
     {
-        return $this->manager->updateAchievementCriteria($owner, $type, $data);
+        return $this->manager->updateAchievementCriterias($owner, $type, $data);
     }
 
     /**

@@ -39,7 +39,7 @@ class AchievementsManagerTest extends TestCase
 
         $this->assertSame(0, count($this->user->achievementCriterias));
 
-        $count = $this->manager->updateAchievementCriteria(
+        $count = $this->manager->updateAchievementCriterias(
             $this->user, 'reach_level', [
                 'value' => 5,
             ]
@@ -60,7 +60,7 @@ class AchievementsManagerTest extends TestCase
         $this->assertSame(0, count($this->user->achievements));
         $this->assertSame(0, $this->user->achievementPoints());
 
-        $count = $this->manager->updateAchievementCriteria(
+        $count = $this->manager->updateAchievementCriterias(
             $this->user, 'reach_level', [
                 'value' => 10,
             ]
@@ -83,7 +83,7 @@ class AchievementsManagerTest extends TestCase
 
         $this->assertSame(0, count($this->user->achievementCriterias));
 
-        $count = $this->manager->updateAchievementCriteria(
+        $count = $this->manager->updateAchievementCriterias(
             $this->user, 'reach_level', [
                 'value' => 5,
             ]

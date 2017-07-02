@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.9.4] - 2016-07-02
+### Changed
+- `LaravelAchievements::criteriaUpdated` renamed to `updateCriterias`.
+
 ## [0.9.3] - 2017-07-02
 ### Added
 - `progress_data` column to `achievement_criteriables` table;
@@ -26,7 +30,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.9.0] - 2017-06-30
 ### Initial release.
 
-[Unreleased]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.3...HEAD
+[Unreleased]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.4...HEAD
+[0.9.4]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.3...0.9.4
 [0.9.3]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.2...0.9.3
 [0.9.2]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.1...0.9.2
 [0.9.1]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.0...0.9.1

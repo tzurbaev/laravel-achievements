@@ -28,7 +28,7 @@ class LaravelAchievementsTest extends TestCase
             ReachLevelCriteria::class,
         ]);
 
-        $count = $achievements->criteriaUpdated($user, 'reach_level', ['value' => 10]);
+        $count = $achievements->updateCriterias($user, 'reach_level', ['value' => 10]);
 
         $this->assertSame(3, $count);
         $this->assertSame(3, count($user->achievementCriterias));
@@ -44,7 +44,7 @@ class LaravelAchievementsTest extends TestCase
             ReachLevelCriteria::class,
         ]);
 
-        $count = Achievements::criteriaUpdated($user, 'reach_level', ['value' => 10]);
+        $count = Achievements::updateCriterias($user, 'reach_level', ['value' => 10]);
 
         $this->assertSame(3, $count);
         $this->assertSame(3, count($user->achievementCriterias));
