@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb9f0e4869e1ecd1a3defc6923afb2e3",
+    "content-hash": "9857d77e496a821eece72cad3e4df29c",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -1530,16 +1530,16 @@
         },
         {
             "name": "tzurbaev/achievements",
-            "version": "0.9.4",
+            "version": "0.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tzurbaev/achievements.git",
-                "reference": "4a52e80dd8d6e1bc725e73abf5fbdc74fb8ce06b"
+                "reference": "2f7ee5c7c3619971a1418a093ff01857accfb36c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tzurbaev/achievements/zipball/4a52e80dd8d6e1bc725e73abf5fbdc74fb8ce06b",
-                "reference": "4a52e80dd8d6e1bc725e73abf5fbdc74fb8ce06b",
+                "url": "https://api.github.com/repos/tzurbaev/achievements/zipball/2f7ee5c7c3619971a1418a093ff01857accfb36c",
+                "reference": "2f7ee5c7c3619971a1418a093ff01857accfb36c",
                 "shasum": ""
             },
             "require": {
@@ -1566,7 +1566,7 @@
                 }
             ],
             "description": "Achievements System",
-            "time": "2017-07-02T13:15:32+00:00"
+            "time": "2017-07-03T12:13:45+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

@@ -76,12 +76,13 @@ class AchievementsStorage implements AchievementsStorageInterface
      *
      * @param mixed  $owner
      * @param string $type
+     * @param mixed $data = null
      *
      * @return array
      */
-    public function getOwnerCriteriasByType($owner, string $type)
+    public function getOwnerCriteriasByType($owner, string $type, $data = null)
     {
-        $criterias = $this->getCriteriasByType($type);
+        $criterias = $this->getCriteriasByType($type, $data);
 
         if (!count($criterias)) {
             return [];
@@ -120,10 +121,11 @@ class AchievementsStorage implements AchievementsStorageInterface
      * Loads achievement criterias with given type.
      *
      * @param string $type
+     * @param mixed $data = null
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    protected function getCriteriasByType(string $type)
+    protected function getCriteriasByType(string $type, $data = null)
     {
         return $this->getModelClass(static::MODEL_CRITERIA, function (string $className) use ($type) {
             return $className::where('type', $type)->get();
