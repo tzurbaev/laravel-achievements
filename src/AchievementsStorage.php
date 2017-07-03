@@ -6,8 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Event;
-use Laravel\Achievements\Events\AchievementsCompleted;
-use Laravel\Achievements\Events\CriteriaUpdated;
 use Zurbaev\Achievements\Achievement;
 use Zurbaev\Achievements\AchievementCriteria;
 use Zurbaev\Achievements\AchievementCriteriaProgress;
@@ -34,16 +32,43 @@ class AchievementsStorage implements AchievementsStorageInterface
     }
 
     /**
-     * Injects actual model class name into given callback.
+     * Returns actual class name from config.
+     *
+     * @param string $section
+     * @param string $type
+     *
+     * @return string
+     */
+    protected function getConfigurableClassName(string $section, string $type)
+    {
+        return $this->config->get('achievements.'.$section.'.'.$type);
+    }
+
+    /**
+     * Injects model class name into given callback.
      *
      * @param string   $type
      * @param callable $callback
      *
-     * @return mixed
+     * @return mixed|string
      */
     protected function getModelClass(string $type, callable $callback)
     {
-        return call_user_func($callback, $this->config->get('achievements.models.'.$type));
+        return call_user_func($callback, $this->getConfigurableClassName('models', $type));
+    }
+
+    /**
+     * Dispatches new Achievements event.
+     *
+     * @param string $type
+     * @param array $args
+     * @return mixed
+     */
+    protected function dispatchEvent(string $type, array $args = [])
+    {
+        $className = $this->getConfigurableClassName('events', $type);
+
+        return Event::dispatch(new $className(...$args));
     }
 
     /**
@@ -363,7 +388,7 @@ class AchievementsStorage implements AchievementsStorageInterface
             ],
         ]);
 
-        Event::dispatch(new CriteriaUpdated($owner, $criteria, $achievement, $progress));
+        $this->dispatchEvent('criteria_updated', [$owner, $criteria, $achievement, $progress]);
 
         return true;
     }
@@ -387,7 +412,7 @@ class AchievementsStorage implements AchievementsStorageInterface
 
         $owner->achievements()->syncWithoutDetaching($patch);
 
-        Event::dispatch(new AchievementsCompleted($owner, $achievements));
+        $this->dispatchEvent('achievements_completed', [$owner, $achievements]);
 
         return true;
     }
