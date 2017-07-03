@@ -3,6 +3,7 @@
 namespace Laravel\Achievements;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Event;
 use Laravel\Achievements\Events\AchievementsCompleted;
@@ -14,6 +15,37 @@ use Zurbaev\Achievements\Contracts\AchievementsStorageInterface;
 
 class AchievementsStorage implements AchievementsStorageInterface
 {
+    const MODEL_ACHIEVEMENT = 'achievement';
+    const MODEL_CRITERIA = 'criteria';
+
+    /**
+     * @var Repository
+     */
+    protected $config;
+
+    /**
+     * AchievementsStorage constructor.
+     *
+     * @param Repository $config
+     */
+    public function __construct(Repository $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * Injects actual model class name into given callback.
+     *
+     * @param string   $type
+     * @param callable $callback
+     *
+     * @return mixed
+     */
+    protected function getModelClass(string $type, callable $callback)
+    {
+        return call_user_func($callback, $this->config->get('achievements.models.'.$type));
+    }
+
     /**
      * Fetches given owner's criterias by given type.
      *
@@ -34,7 +66,9 @@ class AchievementsStorage implements AchievementsStorageInterface
             $query->where('type', $type);
         });
 
-        return $criterias->map(function (AchievementCriteriaModel $criteria) use ($ownerCriteriaProgress) {
+        return $criterias->map(function ($criteria) use ($ownerCriteriaProgress) {
+            /** @var AchievementCriteriaModel $criteria */
+
             return $this->transformCriteriaWithProgress($criteria, $ownerCriteriaProgress->get($criteria->id));
         })->toArray();
     }
@@ -66,7 +100,9 @@ class AchievementsStorage implements AchievementsStorageInterface
      */
     protected function getCriteriasByType(string $type)
     {
-        return AchievementCriteriaModel::where('type', $type)->get();
+        return $this->getModelClass(static::MODEL_CRITERIA, function (string $className) use ($type) {
+            return $className::where('type', $type)->get();
+        });
     }
 
     /**
@@ -78,7 +114,9 @@ class AchievementsStorage implements AchievementsStorageInterface
      */
     protected function transformOwnerCriteriasToProgress(Collection $criterias)
     {
-        return $criterias->keyBy('id')->map(function (AchievementCriteriaModel $criteria) {
+        return $criterias->keyBy('id')->map(function ($criteria) {
+            /** @var AchievementCriteriaModel $criteria */
+
             return new AchievementCriteriaProgress(
                 intval($criteria->pivot->value),
                 false,
@@ -96,7 +134,7 @@ class AchievementsStorage implements AchievementsStorageInterface
      *
      * @return AchievementCriteria
      */
-    protected function transformCriteriaWithProgress(AchievementCriteriaModel $criteria, AchievementCriteriaProgress $progress = null)
+    protected function transformCriteriaWithProgress($criteria, AchievementCriteriaProgress $progress = null)
     {
         $data = [
             'id' => $criteria->id,
@@ -132,7 +170,7 @@ class AchievementsStorage implements AchievementsStorageInterface
             return $criteria->achievementId();
         }, $criterias);
 
-        $achievements = AchievementModel::whereIn('id', array_unique($achievementIds))->get();
+        $achievements = $this->getAchievementsByIds(array_unique($achievementIds));
 
         if (!count($achievements)) {
             return [];
@@ -142,15 +180,32 @@ class AchievementsStorage implements AchievementsStorageInterface
     }
 
     /**
+     * Loads collection of achievements by IDs.
+     *
+     * @param array $achievementIds
+     *
+     * @return mixed
+     */
+    public function getAchievementsByIds(array $achievementIds)
+    {
+        return $this->getModelClass(static::MODEL_ACHIEVEMENT, function (string $className) use ($achievementIds) {
+            return $className::whereIn('id', array_unique($achievementIds))->get();
+        });
+    }
+
+    /**
      * Converts collection of AchievementModel objects to array of Achievement objects.
      *
      * @param Collection $achievements
+     * @param bool       $reloadCriteriasRelation = true
      *
      * @return array
      */
-    public function convertAchievementModelsWithCriterias(Collection $achievements)
+    public function convertAchievementModelsWithCriterias(Collection $achievements, bool $reloadCriteriasRelation = true)
     {
-        $achievements->load('criterias');
+        if ($reloadCriteriasRelation) {
+            $achievements->load('criterias');
+        }
 
         return $achievements->map([$this, 'convertAchievementModelWithCriterias'])->toArray();
     }
@@ -162,13 +217,11 @@ class AchievementsStorage implements AchievementsStorageInterface
      *
      * @return Achievement
      */
-    public function convertAchievementModelWithCriterias(AchievementModel $achievement)
+    public function convertAchievementModelWithCriterias($achievement)
     {
-        if (!$achievement->relationLoaded('criterias')) {
-            $achievement->load('criterias');
-        }
+        $criterias = $achievement->criterias->map(function ($criteria) {
+            /** @var AchievementCriteriaModel $criteria */
 
-        $criterias = $achievement->criterias->map(function (AchievementCriteriaModel $criteria) {
             return $this->transformCriteriaWithProgress($criteria);
         });
 
@@ -185,7 +238,9 @@ class AchievementsStorage implements AchievementsStorageInterface
      */
     protected function transformAchievements(Collection $achievements, array $criterias)
     {
-        return $achievements->map(function (AchievementModel $achievement) use ($criterias) {
+        return $achievements->map(function ($achievement) use ($criterias) {
+            /** @var AchievementModel $achievement */
+
             return $this->transformSingleAchievement($achievement, $criterias);
         });
     }
@@ -198,7 +253,7 @@ class AchievementsStorage implements AchievementsStorageInterface
      *
      * @return Achievement
      */
-    protected function transformSingleAchievement(AchievementModel $achievement, array $criterias)
+    protected function transformSingleAchievement($achievement, array $criterias)
     {
         $achievementCriterias = array_filter($criterias, function (AchievementCriteria $criteria) use ($achievement) {
             return $criteria->achievementId() === $achievement->id;
@@ -255,10 +310,7 @@ class AchievementsStorage implements AchievementsStorageInterface
      */
     public function getAchievementsWithProgressFor($owner, array $achievementIds)
     {
-        /**
-         * @var \Illuminate\Database\Eloquent\Collection $criterias
-         */
-        $criterias = AchievementCriteriaModel::whereIn('achievement_id', $achievementIds)->get();
+        $criterias = $this->getCriteriasByAchievementIds($achievementIds);
 
         if (!count($criterias)) {
             return [];
@@ -268,11 +320,27 @@ class AchievementsStorage implements AchievementsStorageInterface
             $query->whereIn('achievement_criteria_model_id', $criterias->pluck('id'));
         });
 
-        $achievementsCriterias = $criterias->map(function (AchievementCriteriaModel $criteria) use ($ownerCriteriaProgress) {
+        $achievementsCriterias = $criterias->map(function ($criteria) use ($ownerCriteriaProgress) {
+            /** @var AchievementCriteriaModel $criteria */
+
             return $this->transformCriteriaWithProgress($criteria, $ownerCriteriaProgress->get($criteria->id));
         });
 
         return $this->getAchievementsByCriterias($achievementsCriterias->toArray());
+    }
+
+    /**
+     * Loads criterias by achievement IDs.
+     *
+     * @param array $achievementIds
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getCriteriasByAchievementIds(array $achievementIds)
+    {
+        return $this->getModelClass(static::MODEL_CRITERIA, function (string $className) use ($achievementIds) {
+            return $className::whereIn('achievement_id', $achievementIds)->get();
+        });
     }
 
     /**

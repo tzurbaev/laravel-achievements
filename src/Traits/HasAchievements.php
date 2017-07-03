@@ -2,14 +2,11 @@
 
 namespace Laravel\Achievements\Traits;
 
-use Laravel\Achievements\AchievementCriteriaModel;
-use Laravel\Achievements\AchievementModel;
-
 /**
  * Trait HasAchievements
  *
- * @property \Illuminate\Database\Eloquent\Collection|AchievementModel[] $achievements
- * @property \Illuminate\Database\Eloquent\Collection|AchievementCriteriaModel[] $achievementCriterias
+ * @property \Illuminate\Database\Eloquent\Collection|\Laravel\Achievements\AchievementModel[] $achievements
+ * @property \Illuminate\Database\Eloquent\Collection|\Laravel\Achievements\AchievementCriteriaModel[] $achievementCriterias
  */
 trait HasAchievements
 {
@@ -20,8 +17,13 @@ trait HasAchievements
      */
     public function achievements()
     {
-        return $this->morphToMany(AchievementModel::class, 'achievementable')
-            ->withPivot(['completed_at']);
+        return $this->morphToMany(
+            config('achievements.models.achievement'),
+            'achievementable',
+            'achievementables',
+            null,
+            'achievement_model_id'
+        )->withPivot(['completed_at']);
     }
 
     /**
@@ -41,7 +43,12 @@ trait HasAchievements
      */
     public function achievementCriterias()
     {
-        return $this->morphToMany(AchievementCriteriaModel::class, 'achievement_criteriable')
-            ->withPivot(['value', 'completed', 'progress_data', 'updated_at']);
+        return $this->morphToMany(
+            config('achievements.models.criteria'),
+            'achievement_criteriable',
+            'achievement_criteriables',
+            null,
+            'achievement_criteria_model_id'
+        )->withPivot(['value', 'completed', 'progress_data', 'updated_at']);
     }
 }

@@ -17,6 +17,10 @@ class AchievementsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(
             realpath(__DIR__.'/../../database/migrations')
         );
+
+        $this->publishes([
+            realpath(__DIR__.'/../../config/achievements.php') => config_path('achievements.php'),
+        ], 'config');
     }
 
     /**
@@ -24,6 +28,8 @@ class AchievementsServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(realpath(__DIR__.'/../../config/achievements.php'), 'achievements');
+
         $this->app->bind(AchievementsStorageInterface::class, AchievementsStorage::class);
 
         $this->app->singleton(AchievementsManager::class, function () {

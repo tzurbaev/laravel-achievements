@@ -43,7 +43,7 @@ class AchievementModel extends Model
      */
     public function criterias()
     {
-        return $this->hasMany(AchievementCriteriaModel::class, 'achievement_id');
+        return $this->hasMany(config('achievements.models.criteria'), 'achievement_id');
     }
 
     /**

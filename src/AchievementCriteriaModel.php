@@ -48,6 +48,6 @@ class AchievementCriteriaModel extends Model
      */
     public function achievement()
     {
-        return $this->belongsTo(AchievementModel::class);
+        return $this->belongsTo(config('achievements.models.achievement'));
     }
 }

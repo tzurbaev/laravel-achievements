@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.9.5] - 2016-07-03
+### Changed
+- Package now uses model names from config file instead of hardcoded names;
+- Some `AchievementsStorage` methods were refactored to make it more easier to override default Storage behaviour;
+- `php artisan vendor:publish --provider="Laravel\Achievements\Providers\AchievementsServiceProvider" --tag=config` is required to be run after this update.
+
 ## [0.9.4] - 2016-07-02
 ### Changed
 - `LaravelAchievements::criteriaUpdated` renamed to `updateCriterias`.
@@ -30,7 +36,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.9.0] - 2017-06-30
 ### Initial release.
 
-[Unreleased]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.4...HEAD
+[Unreleased]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.5...HEAD
+[0.9.5]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.4...0.9.5
 [0.9.4]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.3...0.9.4
 [0.9.3]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.2...0.9.3
 [0.9.2]: https://github.com/tzurbaev/laravel-achievements/compare/0.9.1...0.9.2
