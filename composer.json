@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "illuminate/support": "~5.4.0|~5.5.0",
         "tzurbaev/achievements": "^0.9"
     },
